@@ -12,7 +12,7 @@ class Author(models.Model):
         post_rating = 0
         post_rating += tmp.get('ag_post')
 
-        tmp = self.user.post_set.aggregate(ag_comment=Sum('rating'))
+        tmp = self.user.comment_set.aggregate(ag_comment=Sum('rating'))
         comment_rating = 0
         comment_rating += tmp.get('ag_comment')
 
