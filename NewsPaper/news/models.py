@@ -8,15 +8,14 @@ class Author(models.Model):
     rating = models.SmallIntegerField(default=0)
 
     def update_rating(self):
-        tmp = self.post_set.aggregate(ag_post=Sum('rating'))
-        post_rating = 0
-        post_rating += tmp.get('ag_post')
+        posts_rating = \
+            self.post_set.aggregate(Sum('rating')).get('rating__sum')
+        comments_rating = \
+            self.user.comment_set.aggregate(Sum('rating')).get('rating__sum')
+        posts_comments = \
+            Comment.objects.filter(post__author=self).aggregate(Sum('rating')).get('rating__sum')
 
-        tmp = self.user.comment_set.aggregate(ag_comment=Sum('rating'))
-        comment_rating = 0
-        comment_rating += tmp.get('ag_comment')
-
-        self.rating = post_rating * 3 + comment_rating
+        self.rating = posts_rating * 3 + comments_rating + posts_comments
         self.save()
 
 
@@ -42,7 +41,7 @@ class Post(models.Model):
     rating = models.SmallIntegerField(default=0)
 
     def preview(self):
-        return f'{self.text[:124]} ...'
+        return f'{self.text[:124]}...'
 
     def like(self):
         self.rating += 1
