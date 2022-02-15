@@ -5,6 +5,36 @@ Posts
 {% endblock title %}
 
 {% block content %}
-<h1>Все товары</h1>
-{{ posts }}
+    <hr>
+    {% if posts %}
+        <h2>Всего новостей {{ posts|length }}</h2>
+        <table>
+            <tr>
+                <td>
+                    Заголовок
+                </td>
+                <td>
+                    Дата публикации
+                </td>
+                <td>
+                    Текст
+                </td>
+            </tr>
+        {% for post in posts %}
+            <tr>
+                <td>
+                    {{ post.title }}
+                </td>
+                <td>
+                    {{ post.creation_date|date:'d M Y' }}
+                </td>
+                <td>
+                    {{ post.text|truncatechars:20 }}
+                </td>
+            </tr>
+        {% endfor %}
+        </table>
+    {% else %}
+        <h2>Новостей нет!</h2>
+    {% endif %}
 {% endblock content %}
