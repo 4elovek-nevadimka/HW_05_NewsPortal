@@ -1,11 +1,14 @@
 {% extends 'default.html' %}
 
+{% load custom_filters %}
+
 {% block title %}
-Posts
+News
 {% endblock title %}
 
 {% block content %}
-<h1>{{ post.title }}</h1>
-<h3>{{ post.creation_date|date:'d M Y' }}</h3>
-<h3>{{ post.text }}</h3>
+    <h1>{{ post.title|censor }}</h1>
+    <hr>
+    <h3>{{ post.creation_date|date:'d-m-Y H:i' }}</h3>
+    <p>{{ post.text|censor }}</p>
 {% endblock content %}
