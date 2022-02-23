@@ -3,7 +3,7 @@
 {% load custom_filters %}
 
 {% block title %}
-News
+    {{ post.title|censor }}
 {% endblock title %}
 
 {% block content %}
@@ -11,4 +11,7 @@ News
     <hr>
     <h3>{{ post.creation_date|date:'d-m-Y H:i' }}</h3>
     <p>{{ post.text|censor }}</p>
+
+    <hr>
+    <a href="{% url 'post_list' %}">К списку новостей</a>
 {% endblock content %}

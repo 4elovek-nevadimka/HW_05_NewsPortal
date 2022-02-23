@@ -40,6 +40,9 @@ class Post(models.Model):
     text = models.TextField()
     rating = models.SmallIntegerField(default=0)
 
+    def get_absolute_url(self):
+        return f'/news/{self.id}'
+
     def preview(self):
         return f'{self.text[:124]}...'
 
