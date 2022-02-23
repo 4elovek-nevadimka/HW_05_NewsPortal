@@ -21,10 +21,21 @@ class FilteredNewsList(ListView):
     context_object_name = 'posts'
     ordering = ['-id']
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['filter'] = NewsFilter(self.request.GET, queryset=self.get_queryset())
-        return context
+    def get_filter(self):
+        return NewsFilter(self.request.GET, queryset=super().get_queryset())
+
+    def get_queryset(self):
+        return self.get_filter().qs
+
+    def get_context_data(self, *args, **kwargs):
+        return {
+            **super().get_context_data(*args, **kwargs), 'filter': self.get_filter(),
+        }
+
+    # def get_context_data(self, **kwargs):
+    #     context = super().get_context_data(**kwargs)
+    #     context['filter'] = NewsFilter(self.request.GET, queryset=self.get_queryset())
+    #     return context
 
 
 # дженерик для получения деталей про новость / статью

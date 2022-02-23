@@ -7,6 +7,7 @@
 {% endblock title %}
 
 {% block content %}
+
     <h1>{{ post.title|censor }}</h1>
     <hr>
     <h3>{{ post.creation_date|date:'d-m-Y H:i' }}</h3>
@@ -14,4 +15,5 @@
 
     <hr>
     <a href="{% url 'post_list' %}">К списку новостей</a>
+
 {% endblock content %}

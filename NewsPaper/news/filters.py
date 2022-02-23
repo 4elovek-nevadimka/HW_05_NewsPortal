@@ -1,13 +1,14 @@
-from django_filters import FilterSet
+from django_filters import FilterSet, DateFromToRangeFilter
 from .models import Post
 
 
 class NewsFilter(FilterSet):
+    # по диапазону дат
+    creation_date = DateFromToRangeFilter()
+
     class Meta:
         model = Post
         fields = {
-            # по дате
-            'creation_date': ['icontains'],
             # по названию статьи
             'title': ['icontains'],
             # по автору
