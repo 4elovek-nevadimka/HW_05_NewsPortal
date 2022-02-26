@@ -1,4 +1,4 @@
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 
 from .filters import NewsFilter
@@ -44,13 +44,15 @@ class PostDetailView(DetailView):
 
 
 # дженерик для создания объекта.
-class PostCreateView(CreateView):
+class PostCreateView(PermissionRequiredMixin, CreateView):
+    permission_required = ('news.add_post',)
     template_name = 'post_create.html'
     form_class = PostForm
 
 
 # дженерик для редактирования объекта.
-class PostUpdateView(LoginRequiredMixin, UpdateView):
+class PostUpdateView(PermissionRequiredMixin, UpdateView):
+    permission_required = ('news.change_post',)
     template_name = 'post_update.html'
     form_class = PostForm
 
