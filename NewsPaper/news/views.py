@@ -1,3 +1,4 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 
 from .filters import NewsFilter
@@ -9,9 +10,7 @@ class NewsList(ListView):
     model = Post
     template_name = 'post_list.html'
     context_object_name = 'posts'
-    # queryset = Post.objects.order_by('-id')
     ordering = ['-id']
-    # постраничный вывод
     paginate_by = 10
 
 
@@ -51,7 +50,7 @@ class PostCreateView(CreateView):
 
 
 # дженерик для редактирования объекта.
-class PostUpdateView(UpdateView):
+class PostUpdateView(LoginRequiredMixin, UpdateView):
     template_name = 'post_update.html'
     form_class = PostForm
 

@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-74u!aup7i7_-*az$mxi*2)j-aqcdie!@h3q)vwu(@13#@ho^rv
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1']
 
 
 # Application definition
@@ -88,6 +88,7 @@ AUTHENTICATION_BACKENDS = [
 ]
 
 LOGIN_URL = '/accounts/login/'
+LOGIN_REDIRECT_URL = '/news/'
 
 SITE_ID = 1
 
