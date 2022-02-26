@@ -57,6 +57,11 @@ class PostUpdateView(LoginRequiredMixin, UpdateView):
     def get_object(self, **kwargs):
         return Post.objects.get(pk=self.kwargs.get('pk'))
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['is_not_author'] = not self.request.user.groups.filter(name='authors').exists()
+        return context
+
 
 # дженерик для удаления новости / статьи
 class PostDeleteView(DeleteView):
