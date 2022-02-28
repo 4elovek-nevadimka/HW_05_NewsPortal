@@ -13,6 +13,11 @@ class NewsList(ListView):
     ordering = ['-id']
     paginate_by = 10
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['is_not_author'] = not self.request.user.groups.filter(name='authors').exists()
+        return context
+
 
 class FilteredNewsList(ListView):
     model = Post
@@ -30,11 +35,6 @@ class FilteredNewsList(ListView):
         return {
             **super().get_context_data(*args, **kwargs), 'filter': self.get_filter(),
         }
-
-    # def get_context_data(self, **kwargs):
-    #     context = super().get_context_data(**kwargs)
-    #     context['filter'] = NewsFilter(self.request.GET, queryset=self.get_queryset())
-    #     return context
 
 
 # дженерик для получения деталей про новость / статью
@@ -58,11 +58,6 @@ class PostUpdateView(PermissionRequiredMixin, UpdateView):
 
     def get_object(self, **kwargs):
         return Post.objects.get(pk=self.kwargs.get('pk'))
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['is_not_author'] = not self.request.user.groups.filter(name='authors').exists()
-        return context
 
 
 # дженерик для удаления новости / статьи

@@ -5,7 +5,7 @@ urlpatterns = [
     # Просто список новостей / статей
     path('', NewsList.as_view(), name='post_list'),
     # Страница с возможностью фильтрации постов
-    path('search/', FilteredNewsList.as_view()),
+    path('search/', FilteredNewsList.as_view(), name='post_filter'),
     # Ссылка на конкретную новость / статью
     path('<int:pk>/', PostDetailView.as_view(), name='post_detail'),
     # Ссылка на добавление новости / статьи

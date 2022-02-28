@@ -2,24 +2,24 @@
 
 {% load custom_filters %}
 
-{% block title %}
-    {{ post.title|censor }}
-{% endblock title %}
+{% block title %} {{ post.title|censor }} {% endblock title %}
+
+{% block header %}
+    <h2>{{ post.title|censor }}</h2>
+    <h4>{{ post.creation_date|date:'d-m-Y H:i' }}</h4>
+{% endblock header %}
 
 {% block content %}
-
-    <h1>{{ post.title|censor }}</h1>
-    <hr>
-    <h3>{{ post.creation_date|date:'d-m-Y H:i' }}</h3>
     <p>{{ post.text|censor }}</p>
+{% endblock content %}
 
-    <h2>Вы действительно хотите удалить эту статью?</h2>
+{% block footer %}
     <form method="POST">
-        {% csrf_token %}
-        <input type="submit" value="Да, удалить!">
+        <h3 align="right">Вы действительно хотите удалить эту статью?
+            {% csrf_token %}
+            <input type="submit" value="Да, удалить!">
+        </h3>
     </form>
 
-    <hr>
     <a href="{% url 'post_list' %}">К списку новостей</a>
-
-{% endblock content %}
+{% endblock footer %}

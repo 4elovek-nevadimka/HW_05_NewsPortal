@@ -2,22 +2,23 @@
 
 {% load custom_filters %}
 
-{% block title %}
-Filtered News
-{% endblock title %}
+{% block title %} Filtered News {% endblock title %}
 
-{% block content %}
+{% block header %}
     {% if posts %}
-        <h2>Найдено новостей {{ posts|length }}</h2>
-        <hr>
-
+        <h2>Всего новостей {{ posts|length }}</h2>
         <!-- Перед таблицей добавим форму для поиска -->
         <form method="GET">
             {{ filter.form }}
             <input type="submit" value="Найти">
         </form>
-        <hr>
+    {% else %}
+        <h2>Новостей нет!</h2>
+    {% endif %}
+{% endblock header %}
 
+{% block content %}
+    {% if posts %}
         <table>
             <tr>
                 <td>
@@ -49,12 +50,16 @@ Filtered News
                 <td>
                     {{ post.author.user }}
                 </td>
-
             </tr>
         {% endfor %}
         </table>
     {% else %}
         <h2>Новостей нет!</h2>
     {% endif %}
-
 {% endblock content %}
+
+{% block footer %}
+    <div>
+        <a href="{% url 'post_list' %}">К списку новостей</a>
+    </div>
+{% endblock footer %}

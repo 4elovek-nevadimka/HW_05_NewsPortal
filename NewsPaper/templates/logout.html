@@ -1,13 +1,14 @@
-<html>
-    <head>
-        <title>News Logout</title>
-    </head>
-    <body>
-        {% block content %}
-            <h2> Вы вышли из системы </h2>
-        {% endblock %}
-        <div>
-            <a href="{% url 'post_list' %}">К списку новостей</a>
-        </div>
-    </body>
-</html>
+{% extends 'default.html' %}
+
+{% block title %} News Logout {% endblock title %}
+
+{% block header %}
+    <h2> Вы вышли из системы </h2>
+{% endblock header %}
+
+{% block content %} {% endblock content %}
+
+{% block footer %}
+     <a href="{% url 'post_list' %}">К списку новостей</a>
+{% endblock footer %}
+

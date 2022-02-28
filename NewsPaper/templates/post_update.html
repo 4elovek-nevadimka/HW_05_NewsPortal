@@ -2,22 +2,22 @@
 
 {% load custom_filters %}
 
-{% block title %}
-    Edit Post
-{% endblock title %}
+{% block title %} Edit Post {% endblock title %}
+
+{% block header %}
+    <h2>Редактирование поста:</h2>
+{% endblock header %}
 
 {% block content %}
-
-    <h3>Редактирование поста:</h3>
-    <hr>
     <form method="POST">
         {% csrf_token %}
         {{ form }}
-        <input type="submit" value="Обновить пост">
+        <div align="right">
+            <input type="submit" value="Обновить пост">
+        </div>
     </form>
-    <hr>
-    {% if is_not_author %}
-        <button> <a href="{% url 'upgrade' %}">Стать автором!</a> </button>
-    {% endif %}
-
 {% endblock content %}
+
+{% block footer %}
+    <a href="{% url 'post_list' %}">К списку новостей</a>
+{% endblock footer %}
