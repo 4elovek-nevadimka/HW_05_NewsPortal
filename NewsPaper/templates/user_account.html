@@ -1,5 +1,7 @@
 {% extends 'default.html' %}
 
+{% load custom_filters %}
+
 {% block title %} Your Account {% endblock title %}
 
 {% block header %}
@@ -24,16 +26,13 @@
 {% endblock header %}
 
 {% block content %}
-<!--    {% for category in categories %}-->
-<!--        <li>-->
-<!--            {{ category.name }}-->
-<!--            {% for subscriber in category.subscribers %}-->
-<!--                <p>-->
-<!--                    subscriber.name-->
-<!--                </p>-->
-<!--            {% endfor %}-->
-<!--        </li>-->
-<!--    {% endfor %}-->
+    <h3>Подписки:</h3>
+    {% for category in categories %}
+        {% if category.subscribers|subscribed:user %}
+            <a href="{% url 'category_detail' category.id %}">{{ category.name }}</a>*&nbsp
+        {% endif %}
+    {% endfor %}
+    <br><br>
 {% endblock content %}
 
 {% block footer %}

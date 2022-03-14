@@ -7,6 +7,9 @@
 {% block header %}
     <h2>{{ post.title|censor }}</h2>
     <h4>{{ post.creation_date|date:'d-m-Y H:i' }}</h4>
+    {% for cat in post.categories.all %}
+        <a href="{% url 'category_detail' cat.id %}">{{ cat.name }}</a>*&nbsp
+    {% endfor %}
 {% endblock header %}
 
 {% block content %}

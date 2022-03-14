@@ -1,4 +1,5 @@
 from django import template
+from django.contrib.auth.models import User
 
 register = template.Library()
 
@@ -18,3 +19,17 @@ def censor(value):
         return value
     else:
         raise ValueError(f'Неверный входной тип данных: {type(value)} должен быть строкой!')
+
+
+@register.filter(name='subscribed')
+def subscribed(qs, user):
+    try:
+        qs.get(pk=user.id)
+        return True
+    except User.DoesNotExist:
+        return False
+
+
+@register.filter(name='by_category')
+def by_category(post_cat_list, category_id):
+    return post_cat_list.filter(category=category_id)

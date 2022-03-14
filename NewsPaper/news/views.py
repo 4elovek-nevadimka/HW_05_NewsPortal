@@ -1,9 +1,11 @@
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import PermissionRequiredMixin, LoginRequiredMixin
+from django.shortcuts import redirect
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 
 from .filters import NewsFilter
 from .forms import PostForm
-from .models import Post, Category
+from .models import Post, Category, PostCategory
 
 
 class NewsList(ListView):
@@ -12,11 +14,6 @@ class NewsList(ListView):
     context_object_name = 'posts'
     ordering = ['-id']
     paginate_by = 10
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['is_not_author'] = not self.request.user.groups.filter(name='authors').exists()
-        return context
 
 
 class FilteredNewsList(ListView):
@@ -77,3 +74,26 @@ class AccountView(LoginRequiredMixin, ListView):
         context = super().get_context_data(**kwargs)
         context['is_not_author'] = not self.request.user.groups.filter(name='authors').exists()
         return context
+
+
+# дженерик для получения деталей категории
+class CategoryDetailView(DetailView):
+    template_name = 'category_detail.html'
+    queryset = Category.objects.all()
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['all_links'] = PostCategory.objects.all()
+        return context
+
+
+@login_required
+def subscribe_me(request, cat_id):
+    Category.objects.get(pk=cat_id).subscribers.add(request.user)
+    return redirect(f'/news/categories/{cat_id}/')
+
+
+@login_required
+def unsubscribe_me(request, cat_id):
+    Category.objects.get(pk=cat_id).subscribers.remove(request.user)
+    return redirect(f'/news/categories/{cat_id}/')
