@@ -1,11 +1,13 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import PermissionRequiredMixin, LoginRequiredMixin
+from django.core.mail import send_mail, EmailMultiAlternatives
 from django.shortcuts import redirect
+from django.template.loader import render_to_string
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 
 from .filters import NewsFilter
 from .forms import PostForm
-from .models import Post, Category, PostCategory
+from .models import Post, Category, PostCategory, Author
 
 
 class NewsList(ListView):
@@ -45,6 +47,32 @@ class PostCreateView(PermissionRequiredMixin, CreateView):
     permission_required = ('news.add_post',)
     template_name = 'post_create.html'
     form_class = PostForm
+
+    def post(self, request, *args, **kwargs):
+        new_post = Post(author=Author.objects.get(pk=request.POST['author']),
+                        category_type=request.POST['category_type'],
+                        title=request.POST['title'],
+                        text=request.POST['text'])
+        new_post.save()
+
+        html_content = render_to_string(
+            'mail_new_post_notification.html',
+            {
+                'post': new_post,
+                'user': request.user,
+            }
+        )
+
+        msg = EmailMultiAlternatives(
+            subject=f'New post: {new_post.title}',
+            body=new_post.text,
+            from_email='skillfactorymailserver@yandex.ru',
+            to=['skillfactorytestuser@yandex.ru'],
+        )
+        msg.attach_alternative(html_content, "text/html")
+        msg.send()
+
+        return redirect('/news/')
 
 
 # дженерик для редактирования объекта.
