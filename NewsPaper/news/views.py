@@ -1,9 +1,9 @@
-from django.contrib.auth.mixins import PermissionRequiredMixin
+from django.contrib.auth.mixins import PermissionRequiredMixin, LoginRequiredMixin
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 
 from .filters import NewsFilter
 from .forms import PostForm
-from .models import Post
+from .models import Post, Category
 
 
 class NewsList(ListView):
@@ -65,3 +65,15 @@ class PostDeleteView(DeleteView):
     template_name = 'post_delete.html'
     queryset = Post.objects.all()
     success_url = '/news/'
+
+
+class AccountView(LoginRequiredMixin, ListView):
+    template_name = 'user_account.html'
+    model = Category
+    context_object_name = 'categories'
+    ordering = ['-id']
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['is_not_author'] = not self.request.user.groups.filter(name='authors').exists()
+        return context

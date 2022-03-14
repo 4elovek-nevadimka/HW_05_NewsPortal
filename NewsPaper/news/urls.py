@@ -1,5 +1,6 @@
 from django.urls import path
-from .views import NewsList, FilteredNewsList, PostDetailView, PostCreateView, PostUpdateView, PostDeleteView
+from .views import NewsList, FilteredNewsList, PostDetailView, PostCreateView, PostUpdateView, PostDeleteView, \
+    AccountView
 
 urlpatterns = [
     # Просто список новостей / статей
@@ -14,4 +15,5 @@ urlpatterns = [
     path('<int:pk>/edit/', PostUpdateView.as_view(), name='post_update'),
     # Ссылка на удаление новости / статьи
     path('<int:pk>/delete/', PostDeleteView.as_view(), name='post_delete'),
+    path('account/', AccountView.as_view(), name='account'),
 ]

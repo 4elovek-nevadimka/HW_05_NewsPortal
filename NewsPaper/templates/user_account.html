@@ -1,0 +1,41 @@
+{% extends 'default.html' %}
+
+{% block title %} Your Account {% endblock title %}
+
+{% block header %}
+    <table width="100%">
+        <tr>
+            <td>
+                <h2>Вы вошли как {{ user.username }}</h2>
+            </td>
+            <td align="right">
+                <a href="{% url 'logout' %}">Выйти</a>
+            </td>
+        </tr>
+    </table>
+    <div align="right">
+        {% if is_not_author %}
+            <button> <a href="{% url 'upgrade' %}">Стать автором!</a> </button>
+        {% else %}
+            <button> <a href="{% url 'downgrade' %}">Не быть автором!</a> </button>
+        {% endif %}
+    </div>
+
+{% endblock header %}
+
+{% block content %}
+<!--    {% for category in categories %}-->
+<!--        <li>-->
+<!--            {{ category.name }}-->
+<!--            {% for subscriber in category.subscribers %}-->
+<!--                <p>-->
+<!--                    subscriber.name-->
+<!--                </p>-->
+<!--            {% endfor %}-->
+<!--        </li>-->
+<!--    {% endfor %}-->
+{% endblock content %}
+
+{% block footer %}
+     <a href="{% url 'post_list' %}">К списку новостей</a>
+{% endblock footer %}

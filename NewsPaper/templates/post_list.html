@@ -8,18 +8,11 @@
     <div align="right">
         {% if user.is_authenticated %}
             <div>
-                Привет, {{ user.username }}!
-                <a href="{% url 'logout' %}">Выйти</a>
+                Привет, <a href="{% url 'account' %}">{{ user.username }}</a>!
             </div>
-            {% if is_not_author %}
-                <button> <a href="{% url 'upgrade' %}">Стать автором!</a> </button>
-            {% else %}
-                <button> <a href="{% url 'downgrade' %}">Не быть автором!</a> </button>
-            {% endif %}
         {% else %}
              <div>
-                 Вы не зарегистрированы!
-                 <a href="/../accounts/login/">Войти</a>
+                 Вы не зарегистрированы!<a href="/../accounts/login/">Войти</a>
              </div>
         {% endif %}
     </div>
