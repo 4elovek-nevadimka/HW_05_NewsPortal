@@ -1,6 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import PermissionRequiredMixin, LoginRequiredMixin
-from django.core.mail import send_mail, EmailMultiAlternatives
+from django.core import mail
+from django.core.mail import EmailMultiAlternatives
 from django.shortcuts import redirect
 from django.template.loader import render_to_string
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
@@ -54,25 +55,39 @@ class PostCreateView(PermissionRequiredMixin, CreateView):
                         title=request.POST['title'],
                         text=request.POST['text'])
         new_post.save()
+        # пока добавляем просто первую категорию
+        cat = Category.objects.get(pk=1)
+        new_post.categories.add(cat)
+        mail_messages = []
+        for subscriber in cat.subscribers.all():
+            mail_messages.append(self.create_mail_message(new_post, subscriber))
 
+        if len(mail_messages) > 0:
+            connection = mail.get_connection()
+            # Manually open the connection
+            connection.open()
+            connection.send_messages(mail_messages)
+            # We need to manually close the connection.
+            connection.close()
+
+        return redirect('/news/')
+
+    def create_mail_message(self, new_post, subscriber):
         html_content = render_to_string(
             'mail_new_post_notification.html',
             {
                 'post': new_post,
-                'user': request.user,
+                'user': subscriber,
             }
         )
-
         msg = EmailMultiAlternatives(
             subject=f'New post: {new_post.title}',
             body=new_post.text,
             from_email='skillfactorymailserver@yandex.ru',
-            to=['skillfactorytestuser@yandex.ru'],
+            to=[subscriber.email],
         )
         msg.attach_alternative(html_content, "text/html")
-        msg.send()
-
-        return redirect('/news/')
+        return msg
 
 
 # дженерик для редактирования объекта.
