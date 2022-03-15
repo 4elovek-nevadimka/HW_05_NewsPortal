@@ -8,5 +8,6 @@
 <body>
     <h2>Привет, {{ user.username }}. Новая статья в твоём любимом разделе!</h2>
     <p>{{ post.text|truncatechars:50 }}</p>
+    <a href="http://127.0.0.1:8000{% url 'post_detail' post.id %}">Посмотреть статью...</a>
 </body>
 </html>
