@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h2>Привет, {{ user.username }}. Смотри, еженедельная подборка статей для тебя:</h2>
+    {% for post in weekly_posts %}
+        <p>
+            <a href="http://127.0.0.1:8000{% url 'post_detail' post.id %}">{{ post.title|truncatechars:50 }}</a>
+        </p>
+    {% endfor %}
+</body>
+</html>

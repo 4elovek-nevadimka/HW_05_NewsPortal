@@ -44,6 +44,8 @@ INSTALLED_APPS = [
     'sign',
     'news.apps.NewsConfig',
 
+    'django_apscheduler',
+
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
@@ -135,7 +137,7 @@ TIME_ZONE = 'UTC'
 
 USE_I18N = True
 
-USE_TZ = True
+USE_TZ = False
 
 
 # Static files (CSS, JavaScript, Images)
@@ -163,3 +165,6 @@ EMAIL_HOST_PASSWORD = 'SFms1234567890'
 EMAIL_USE_SSL = True
 
 DEFAULT_FROM_EMAIL = 'skillfactorymailserver@gmail.com'
+
+APSCHEDULER_DATETIME_FORMAT = "N j, Y, f:s a"
+APSCHEDULER_RUN_NOW_TIMEOUT = 25  # Seconds
