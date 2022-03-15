@@ -40,8 +40,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django_filters',
 
-    'news',
+    # 'news',
     'sign',
+    'news.apps.NewsConfig',
 
     'allauth',
     'allauth.account',
