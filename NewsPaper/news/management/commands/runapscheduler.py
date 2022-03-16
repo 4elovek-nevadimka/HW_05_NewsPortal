@@ -1,6 +1,4 @@
 import logging
-from collections import defaultdict
-from datetime import timedelta, datetime
 
 from django.conf import settings
 
@@ -11,22 +9,15 @@ from django_apscheduler.jobstores import DjangoJobStore
 from django_apscheduler.models import DjangoJobExecution
 
 from ...mail_manager import send_email_by_scheduler
-from ...models import Post
 
 logger = logging.getLogger(__name__)
 
 
 # наша задача по выводу текста на экран
 def weekly_mail_notification():
-    subscribers_posts = defaultdict(list)
-    today = datetime.now()
-    week_ago = today - timedelta(days=7)
-    for post in Post.objects.filter(creation_date__range=[week_ago, today]):
-        for category in post.categories.all():
-            for subscriber in category.subscribers.all():
-                subscribers_posts[subscriber].append(post)
-    send_email_by_scheduler(subscribers_posts)
-    print("letters have been sent...")
+    send_email_by_scheduler()
+    print("weekly notification have been sent from apscheduler...")
+
     # debug print
     # print(subscribers_posts.items())
     # for user in subscribers_posts.keys():
@@ -51,8 +42,8 @@ class Command(BaseCommand):
         # добавляем работу нашему задачнику
         scheduler.add_job(
             weekly_mail_notification,
-            trigger=CronTrigger(second="*/10"),
-            # trigger=CronTrigger(day_of_week="thu"),
+            # trigger=CronTrigger(second="*/10"),
+            trigger=CronTrigger(day_of_week="thu"),
             # То же, что и интервал, но задача тригера таким образом более понятна django
             id="weekly_mail_notification",  # уникальный айди
             max_instances=1,

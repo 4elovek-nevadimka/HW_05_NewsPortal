@@ -1,20 +1,32 @@
+from collections import defaultdict
+from datetime import datetime, timedelta
+
 from django.core import mail
 from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
 
-from .models import Category
+from .models import Category, Post
 
 
 def send_email_by_signal(new_post):
     cat = Category.objects.get(pk=1)    # пока добавляем просто первую категорию
     new_post.categories.add(cat)
+
     mail_messages = []
     for subscriber in cat.subscribers.all():
         mail_messages.append(create_one_time_mail_message(new_post, subscriber))
     send_multiple_emails(mail_messages)
 
 
-def send_email_by_scheduler(subscribers_posts):
+def send_email_by_scheduler():
+    subscribers_posts = defaultdict(list)
+    today = datetime.now()
+    week_ago = today - timedelta(days=7)
+    for post in Post.objects.filter(creation_date__range=[week_ago, today]):
+        for category in post.categories.all():
+            for subscriber in category.subscribers.all():
+                subscribers_posts[subscriber].append(post)
+
     mail_messages = []
     for subscriber in subscribers_posts.keys():
         mail_messages.append(create_weekly_mail_message(subscriber, subscribers_posts[subscriber]))
