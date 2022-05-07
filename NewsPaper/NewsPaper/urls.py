@@ -16,7 +16,12 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
+from .views import Index
+
 urlpatterns = [
+    path('i18n/', include('django.conf.urls.i18n')),
+    path('', Index.as_view()),
+
     path('admin/', admin.site.urls),
     path('news/', include('news.urls')),
     path('sign/', include('sign.urls')),

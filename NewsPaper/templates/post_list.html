@@ -1,26 +1,38 @@
 {% extends 'default.html' %}
 
+{% load i18n %}
 {% load custom_filters %}
 
 {% block title %} News {% endblock title %}
 
 {% block header %}
-    <div align="right">
-        {% if user.is_authenticated %}
-            <div>
-                Привет, <a href="{% url 'account' %}">{{ user.username }}</a>!
-            </div>
-        {% else %}
-             <div>
-                 Вы не зарегистрированы!<a href="/../accounts/login/">Войти</a>
-             </div>
-        {% endif %}
-    </div>
-    {% if posts %}
-        <h2>Всего новостей {{ posts|length }}</h2>
-    {% else %}
-        <h2>Новостей нет!</h2>
-    {% endif %}
+    <table width="100%">
+        <tr>
+            <td>
+                <div align="left">
+                    {% if posts %}
+                        <h2>{% trans "Total news" %} {{ posts|length }}</h2>
+                    {% else %}
+                        <h2>{% trans "No news" %}!</h2>
+                    {% endif %}
+                </div>
+            </td>
+            <td>
+                <div align="right">
+                    {% if user.is_authenticated %}
+                        <div>
+                            Привет, <a href="{% url 'account' %}">{{ user.username }}</a>!
+                        </div>
+                    {% else %}
+                         <div>
+                             Вы не зарегистрированы!<a href="/../accounts/login/">Войти</a>
+                         </div>
+                    {% endif %}
+                </div>
+            </td>
+        </tr>
+    </table>
+
 {% endblock header %}
 
 {% block content %}

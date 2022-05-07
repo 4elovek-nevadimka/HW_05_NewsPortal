@@ -5,6 +5,24 @@
         <title>{% block title %}{% endblock title %}</title>
     </head>
     <body>
+        <div style="width: 80px; float: right">
+            <div style="float: left">
+                <form action="{% url 'set_language' %}" method="post">
+                    {% csrf_token %}
+                    <input name="next" type="hidden" value="{{ redirect_to }}" />
+                    <input name="language" type="hidden" value="ru" />
+                    <input type="submit" value="RU" />
+                </form>
+            </div>
+            <div style="float: right;">
+                <form action="{% url 'set_language' %}" method="post">
+                    {% csrf_token %}
+                    <input name="next" type="hidden" value="{{ redirect_to }}" />
+                    <input name="language" type="hidden" value="en" />
+                    <input type="submit" value="EN" />
+                </form>
+            </div>
+        </div>
         <div align="left">
             {% block header %}{% endblock header %}
         </div>
