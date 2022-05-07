@@ -1,4 +1,5 @@
 {% load i18n %}
+{% load tz %}
 
 <html lang="en">
 <head>
@@ -6,6 +7,11 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Page title</title>
+
+    <style>
+        body {background-color: {% if current_time.hour >= 19 or current_time.hour <= 7 %} darkcyan {% else %} powderblue {% endif %};}
+    </style>
+
 </head>
 <body>
 
@@ -48,37 +54,54 @@
 
     {{ hello_world }}
     {% trans "One more example" %}!
+
+    {% get_current_timezone as TIME_ZONE %}
+    <form action="" method="POST">
+        {% csrf_token %}
+        <label for="timezone">Time zone:</label>
+        <select name="timezone">
+            {% for tz in timezones %}
+            <option value="{{ tz }}"{% if tz == TIME_ZONE %} selected{% endif %}>{{ tz }}</option>
+            {% endfor %}
+        </select>
+        <input type="submit" value="Set">
+    </form>
+
+    {{ TIME_ZONE }}
+    {{ current_time|timezone:TIME_ZONE }}
+
 </body>
 </html>
 
-            <table width="100%">
-                <tr>
-                    <td>
-                        <div align="left">
-                            {% block header %}{% endblock header %}
-                        </div>
-                    </td>
-                    <td>
-                        <div align="right">
-                            <div style="width:80px;">
-                                <div style="float: left;">
-                                    <form action="{% url 'set_language' %}" method="post">
-                                        {% csrf_token %}
-                                        <input name="next" type="hidden" value="{{ redirect_to }}" />
-                                        <input name="language" type="hidden" value="ru" />
-                                        <input type="submit" value="RU" />
-                                    </form>
-                                </div>
-                                <div style="float: right;">
-                                    <form action="{% url 'set_language' %}" method="post">
-                                        {% csrf_token %}
-                                        <input name="next" type="hidden" value="{{ redirect_to }}" />
-                                        <input name="language" type="hidden" value="en" />
-                                        <input type="submit" value="EN" />
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                    </td>
-                </tr>
-            </table>
+<!--unusable-->
+<table width="100%">
+    <tr>
+        <td>
+            <div align="left">
+                {% block header %}{% endblock header %}
+            </div>
+        </td>
+        <td>
+            <div align="right">
+                <div style="width:80px;">
+                    <div style="float: left;">
+                        <form action="{% url 'set_language' %}" method="post">
+                            {% csrf_token %}
+                            <input name="next" type="hidden" value="{{ redirect_to }}" />
+                            <input name="language" type="hidden" value="ru" />
+                            <input type="submit" value="RU" />
+                        </form>
+                    </div>
+                    <div style="float: right;">
+                        <form action="{% url 'set_language' %}" method="post">
+                            {% csrf_token %}
+                            <input name="next" type="hidden" value="{{ redirect_to }}" />
+                            <input name="language" type="hidden" value="en" />
+                            <input type="submit" value="EN" />
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </td>
+    </tr>
+</table>
